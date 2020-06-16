@@ -1,3 +1,13 @@
-.app {
-  color: grey;
+body {
+  padding: 1rem;
+  margin: 0;
+  min-height: 100vh;
+  background: #0f0f0f;
+  color: ghostwhite;
+  
 }
+
+a {
+  color: white;
+}
+

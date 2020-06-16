@@ -2,39 +2,26 @@
 
 import * as React from "react"
 import * as ReactDOM from "react-dom"
-import FileBrowser from "./components/FileBrowser/FileBrowser"
-import Markdown from "markdown-to-jsx"
+import Intro from "./components/Intro"
 
-declare global {
-  interface Window {
-    require: any
-  }
-}
-const { ipcRenderer } = window.require("electron")
+
+// declare global {
+//   interface Window {
+//     require: any
+//   }
+// }
+
+// const { ipcRenderer } = require("electron")
+import {ipcRenderer} from "electron"
 
 // Import the styles here to process them with webpack
 import "@public/style.css"
 
-const App = () => {
-  const [fileText, setFileText] = React.useState("")
-
-  React.useEffect(() => {
-    ipcRenderer.on("FILE_AS_STRING", (event: any, fileContent: string) => {
-      console.log(fileContent)
-      console.log(typeof fileContent)
-      setFileText(fileContent)
-    })
-  }, [])
-
-  return (
-    <div className="app">
-      <h4>Holy Yikes</h4>
-      <p>Hello</p>
-      <Markdown>{fileText}</Markdown>
-      <FileBrowser />
-    </div>
-  )
-}
+const  App = () => (
+  <div className="App">
+    <Intro/>
+  </div>
+);
 
 // tslint:disable-next-line: variable-name
 
