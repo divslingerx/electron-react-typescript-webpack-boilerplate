@@ -1,12 +1,9 @@
-"use strict"
-
 /**
- * Entry point of the Election app.
+ * Entry point of the Election app. This is essentially your backend"
  */
 import { app, BrowserWindow, Menu, MenuItem } from "electron"
 import * as path from "path"
 import * as url from "url"
-import { openMarkdownFile } from "./lib/openFile"
 
 let mainWindow: Electron.BrowserWindow
 
@@ -39,7 +36,7 @@ function createWindow(): void {
     // Dereference the window object, usually you would store windows
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
-    mainWindow = null
+    mainWindow = null as any
   })
 }
 
@@ -47,122 +44,156 @@ function createWindow(): void {
 const isMac: boolean = process.platform === "darwin"
 
 const template: any = [
-  // { role: 'appMenu' }
-  ...(isMac
-    ? [
-        {
-          label: app.getName(),
-          submenu: [
-            { role: "about" },
-            { type: "separator" },
-            { role: "services" },
-            { type: "separator" },
-            { role: "hide" },
-            { role: "hideothers" },
-            { role: "unhide" },
-            { type: "separator" },
-            { role: "quit" },
-          ],
-        },
-      ]
-    : []),
-  // { role: 'fileMenu' }
   {
-    label: "File",
+    label: 'Edit',
     submenu: [
       {
-        label: "Open Folder",
+        label: 'Undo',
+        accelerator: 'CmdOrCtrl+Z',
+        role: 'undo'
       },
       {
-        label: "Open File",
-        accelerater: "CmdOrCtl+O",
-        click() {
-          openMarkdownFile(mainWindow)
-        },
+        label: 'Redo',
+        accelerator: 'Shift+CmdOrCtrl+Z',
+        role: 'redo'
       },
-      isMac ? { role: "close" } : { role: "quit" },
-    ],
-  },
-  // { role: 'editMenu' }
-  {
-    label: "Edit",
-    submenu: [
-      { role: "undo" },
-      { role: "redo" },
-      { type: "separator" },
-      { role: "cut" },
-      { role: "copy" },
-      { role: "paste" },
-      ...(isMac
-        ? [
-            { role: "pasteAndMatchStyle" },
-            { role: "delete" },
-            { role: "selectAll" },
-            { type: "separator" },
-            {
-              label: "Speech",
-              submenu: [{ role: "startspeaking" }, { role: "stopspeaking" }],
-            },
-          ]
-        : [{ role: "delete" }, { type: "separator" }, { role: "selectAll" }]),
-    ],
-  },
-  // { role: 'viewMenu' }
-  {
-    label: "View",
-    submenu: [
-      { role: "reload" },
-      { role: "forcereload" },
-      { role: "toggledevtools" },
-      { type: "separator" },
-      { role: "resetzoom" },
-      { role: "zoomin" },
-      { role: "zoomout" },
-      { type: "separator" },
-      { role: "togglefullscreen" },
-    ],
-  },
-  // { role: 'windowMenu' }
-  {
-    label: "Window",
-    submenu: [
-      { role: "minimize" },
-      { role: "zoom" },
-      ...(isMac
-        ? [
-            { type: "separator" },
-            { role: "front" },
-            { type: "separator" },
-            { role: "window" },
-          ]
-        : [{ role: "close" }]),
-    ],
+      {
+        type: 'separator'
+      },
+      {
+        label: 'Cut',
+        accelerator: 'CmdOrCtrl+X',
+        role: 'cut'
+      },
+      {
+        label: 'Copy',
+        accelerator: 'CmdOrCtrl+C',
+        role: 'copy'
+      },
+      {
+        label: 'Paste',
+        accelerator: 'CmdOrCtrl+V',
+        role: 'paste'
+      },
+      {
+        label: 'Select All',
+        accelerator: 'CmdOrCtrl+A',
+        role: 'selectall'
+      },
+    ]
   },
   {
-    role: "help",
+    label: 'View',
     submenu: [
       {
-        label: "Learn More",
-        click: async () => {
-          const { shell } = require("electron")
-          await shell.openExternal("https://electronjs.org")
-        },
+        label: 'Reload',
+        accelerator: 'CmdOrCtrl+R',
+        click: function(item: any, focusedWindow: any) {
+          if (focusedWindow)
+            focusedWindow.reload();
+        }
       },
-    ],
+      {
+        label: 'Toggle Full Screen',
+        accelerator: (function() {
+          if (process.platform === 'darwin')
+            return 'Ctrl+Command+F';
+          else
+            return 'F11';
+        })(),
+        click: function(item: any, focusedWindow: any) {
+          if (focusedWindow)
+            focusedWindow.setFullScreen(!focusedWindow.isFullScreen());
+        }
+      },
+      {
+        label: 'Toggle Developer Tools',
+        accelerator: (function() {
+          if (process.platform === 'darwin')
+            return 'Alt+Command+I';
+          else
+            return 'Ctrl+Shift+I';
+        })(),
+        click: function(item: any, focusedWindow: any) {
+          if (focusedWindow)
+            focusedWindow.toggleDevTools();
+        }
+      },
+    ]
   },
   {
-    label: "Developer",
+    label: 'Window',
+    role: 'window',
     submenu: [
       {
-        label: "Toggle Developer Tools",
-        accellerator: isMac ? "Alt+Command+I" : "Ctrl+Shift+I",
-        click() {
-          mainWindow.webContents.toggleDevTools()
-        },
+        label: 'Minimize',
+        accelerator: 'CmdOrCtrl+M',
+        role: 'minimize'
       },
-    ],
+      {
+        label: 'Close',
+        accelerator: 'CmdOrCtrl+W',
+        role: 'close'
+      },
+    ]
   },
-]
+  {
+    label: 'Help',
+    role: 'help',
+    submenu: [
+      {
+        label: 'Learn More',
+        click: function() { console.log("HELP WAS CLICKED") }
+      },
+    ]
+  },
+];
+
+if (process.platform === 'darwin') {
+  const name = app.getName();
+  template.unshift({
+    label: name,
+    submenu: [
+      {
+        label: 'About ' + name,
+        role: 'about'
+      },
+      {
+        type: 'separator'
+      },
+      {
+        label: 'Services',
+        role: 'services',
+        submenu: []
+      },
+      {
+        type: 'separator'
+      },
+      {
+        label: 'Hide ' + name,
+        accelerator: 'Command+H',
+        role: 'hide'
+      },
+      {
+        label: 'Hide Others',
+        accelerator: 'Command+Shift+H',
+        role: 'hideOthers'
+      },
+      {
+        label: 'Show All',
+        role: 'unhide'
+      },
+      {
+        type: 'separator'
+      },
+      {
+        label: 'Quit',
+        accelerator: 'Command+Q',
+        click: function() { app.quit(); }
+      },
+    ]
+  });
+}
 
 const menu = Menu.buildFromTemplate(template)
 Menu.setApplicationMenu(menu)
