@@ -9,7 +9,7 @@ const Intro = () => (
       
       <a
         className="App-link"
-        href="https://github.com/Toreilly317/electron-react-typescript-webpack-boilerplate"
+        href="https://github.com/divslingerx/electron-react-typescript-webpack-boilerplate"
         target="_blank"
         rel="noopener noreferrer"
       >
