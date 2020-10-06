@@ -123,7 +123,7 @@ electron-react-typescript-base-proj/
 
 ## Author
 
- [@TOReilly317](https://github.com/toreilly317)
+ [@DivSlingerX](https://github.com/divslingerx)
 
 ## License
 
