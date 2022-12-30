@@ -65,7 +65,7 @@
     "file-loader": "^6.0.0",
     "html-webpack-plugin": "^4.3.0",
     "lodash": "^4.17.19",
-    "mocha": "^8.0.1",
+    "mocha": "^8.4.0",
     "rimraf": "^3.0.2",
     "source-map-loader": "^1.0.0",
     "spectron": "^11.0.0",
